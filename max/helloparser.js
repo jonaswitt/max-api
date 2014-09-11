@@ -11,7 +11,7 @@ HelloParser.prototype.parseLine = function(line) {
   var rf_address = info_fields[1];
   var firmware_version = parseInt(info_fields[2], 16);
 
-  console.log("Serial Number: " + serial_number + " RF Address: " + rf_address + " Firmware: " + firmware_version);
+  return {"serial_number": serial_number, "rf_address": rf_address, "firmware": firmware_version};
 };
 
 module.exports = HelloParser
