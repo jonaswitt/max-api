@@ -1,0 +1,12 @@
+{
+  "name": "max-api",
+  "description": "REST API for the MAX! heating control system by eq-3",
+  "author": "Jonas Witt",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "express": "4.x",
+    "split": "0.3.x",
+    "through": "2.3.x"
+  }
+}
