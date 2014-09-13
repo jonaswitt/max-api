@@ -1,4 +1,3 @@
-
 var express = require('express');
 var net = require('net');
 var dgram = require('dgram');
@@ -6,13 +5,13 @@ var split = require('split');
 var through = require('through');
 var es = require('event-stream');
 var reduce = require('stream-reduce');
-var maxparser = require('./max/parser');
+var maxparser = require('../max/parser');
+
+var router = express.Router();
 
 var PORT = 62910;
 
-var app = express();
-
-app.get('/cubes', function(req, res) {
+router.get('/', function(req, res) {
   var cubes = [];
   var client = dgram.createSocket('udp4');
 
@@ -52,7 +51,7 @@ app.get('/cubes', function(req, res) {
   }, 2000);
 })
 
-app.get('/cubes/:ip', function(req, res) {
+router.get('/:ip', function(req, res) {
   var parser = new maxparser();
   var client = net.createConnection(PORT, req.params.ip)
   client.on('error', function(error) {
@@ -84,5 +83,5 @@ app.get('/cubes/:ip', function(req, res) {
     res.json(data)
   }))
 })
-app.listen(3000)
-console.log("Listening in http://localhost:3000/...")
+
+module.exports = router;
