@@ -36,9 +36,10 @@ app.get('/', function(req, res) {
     for (var attrname in data) { acc[attrname] = data[attrname]; }
     return acc;
   }, {}))
-  // turn combined dict into JSON
-  .pipe(es.stringify())
-  .pipe(res);
+  // return combined dict as JSON
+  .pipe(through(function (data) {
+    res.json(data)
+  }))
 })
 app.listen(3000)
 console.log("Listening in http://localhost:3000/...")
