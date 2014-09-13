@@ -7,14 +7,13 @@ var es = require('event-stream');
 var reduce = require('stream-reduce');
 var maxparser = require('./max/parser');
 
-var HOST = '192.168.1.150';
 var PORT = 62910;
 
 var app = express();
 
-app.get('/', function(req, res) {
+app.get('/cubes/:ip', function(req, res) {
   var parser = new maxparser();
-  var client = net.createConnection(PORT, HOST)
+  var client = net.createConnection(PORT, req.params.ip)
 
   client
   // split into lines
