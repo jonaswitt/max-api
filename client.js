@@ -14,6 +14,9 @@ var app = express();
 app.get('/cubes/:ip', function(req, res) {
   var parser = new maxparser();
   var client = net.createConnection(PORT, req.params.ip)
+  client.on('error', function(error) {
+    res.status(404).json({'error': "Could not connect to " + req.params.ip + ": " + error})
+  })
 
   client
   // split into lines
