@@ -1,12 +1,14 @@
 
 var helloparser = require('./helloparser')
 var metadataparser = require('./metadataparser')
+var configparser = require('./configparser')
 
 function Parser() {
 
 }
 
 Parser.prototype.parseLine = function(line) {
+  console.log(line)
   var items = line.split(':')
   if (items[0] == 'H') {
       var parser = new helloparser()
@@ -15,6 +17,13 @@ Parser.prototype.parseLine = function(line) {
   else if (items[0] == 'M') {
       var parser = new metadataparser()
       return {'M': parser.parseLine(line)}
+  }
+  else if (items[0] == 'C') {
+      var parser = new configparser()
+      var data = parser.parseLine(line)
+      var response = {}
+      response["C_" + data['address']] = data
+      return response
   }
   else {
     // console.log(line);
