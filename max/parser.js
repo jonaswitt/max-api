@@ -2,6 +2,7 @@
 var helloparser = require('./helloparser')
 var metadataparser = require('./metadataparser')
 var configparser = require('./configparser')
+var devicelistparser = require('./devicelistparser')
 
 function Parser() {
 
@@ -24,6 +25,10 @@ Parser.prototype.parseLine = function(line) {
       var response = {}
       response["C_" + data['address']] = data
       return response
+  }
+  else if (items[0] == 'L') {
+      var parser = new devicelistparser()
+      return {'L': parser.parseLine(line)}
   }
   else {
     // console.log(line);
