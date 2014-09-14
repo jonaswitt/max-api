@@ -43,12 +43,10 @@ DeviceListParser.prototype.parseLine = function(line) {
   response['valve_pos'] = info[pos++]
   response['temp_point'] = info[pos++] / 2
 
-  console.log("date: " + info.slice(pos, pos+3).toString('hex'))
   var date1 = info[pos++]
   var date2 = info[pos++]
 
   var date = (date1 << 8) + date2
-  console.log("byte1: " + date1 + " byte2: " + date2 + " date: " + date)
 
   var month = ((date & 0xE000) >> 12) + ((date & 0x80) >> 7)
   var day = (date & 0x1F00) >> 8

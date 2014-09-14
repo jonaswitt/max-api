@@ -61,26 +61,13 @@ router.get('/:ip', function(req, res) {
   client
   // split into lines
   .pipe(split())
-  // stop after L: line
+  // parse until done, then return JSON
   .pipe(through(function (line) {
-    this.queue(line)
-    if (line.split(':')[0] == 'L') {
+    parser.parseLine(line)
+    if (parser.finishedParsing) {
       client.end()
-      this.end()
+      res.json(parser.raw_out)
     }
-  }))
-  // parse each line
-  .pipe(es.map(function (data, cb) {
-    cb(null, parser.parseLine(data))
-  }))
-  // combine all dictionaries
-  .pipe(reduce(function(acc, data) {
-    for (var attrname in data) { acc[attrname] = data[attrname]; }
-    return acc;
-  }, {}))
-  // return combined dict as JSON
-  .pipe(through(function (data) {
-    res.json(data)
   }))
 })
 
