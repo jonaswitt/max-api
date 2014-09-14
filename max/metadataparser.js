@@ -25,6 +25,9 @@ MetadataParser.prototype.parseLine = function(line) {
   for (var i = 0; i < device_count; i++) {
     var device_type_id = metadata[pos++]
     switch (device_type_id) {
+    case 0:
+      var device_type = 'cube'
+      break;
     case 1:
       var device_type = 'thermostat'
       break;
@@ -38,7 +41,7 @@ MetadataParser.prototype.parseLine = function(line) {
       var device_type = 'eco_switch'
       break;
     default:
-      var device_type = 'unknown'
+      var device_type = device_type_id
     }
     var device_address = metadata.slice(pos, pos += 3).toString('hex')
     var device_serial = metadata.slice(pos, pos += 10).toString()
