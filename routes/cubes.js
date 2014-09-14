@@ -66,7 +66,7 @@ router.get('/:ip', function(req, res) {
     parser.parseLine(line)
     if (parser.finishedParsing) {
       client.end()
-      res.json(parser.raw_out)
+      res.json(parser.data)
     }
   }))
 })
