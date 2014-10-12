@@ -88,8 +88,5 @@ router.get('/:ip', function(req, res) {
     }
   }))
 })
-    }
-  }))
-})
 
 module.exports = router;
