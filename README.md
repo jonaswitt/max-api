@@ -15,7 +15,8 @@ Currently supported features
 ----------------------------
 
 - GET /cubes
-  Return all MAX! cubes on the local network as a JSON array
+  Return all MAX! cubes on the local network as a JSON array (contains IP address,
+  port and firmware)
 
 - GET /cubes/:ip
   Return status information about the cube specified by IP address :ip as a
@@ -24,10 +25,10 @@ Currently supported features
 Getting Started
 ---------------
 
-The requirements to run this program is Node.js (see http://nodejs.org/ for
+The requirement to run this program is Node.js (see http://nodejs.org/ for
 details / installation).
 
-To install this program's dependencies, use the node package manager and run 
+To install this program's dependencies, use the node package manager and run
 `npm install -g`.
 
 To run this program, simply use `node app.js`.
