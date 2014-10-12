@@ -9,6 +9,7 @@
     "split": "0.3.x",
     "through": "2.3.x",
     "event-stream": "3.1.x",
-    "stream-reduce": "1.0.x"
+    "stream-reduce": "1.0.x",
+    "body-parser": "1.9.x"
   }
 }
