@@ -67,7 +67,7 @@ Parser.prototype.parseMetadata = function(line) {
     var device_room_id = metadata[pos++]
 
     if (!this.data['rooms'][device_room_id]) this.data['rooms'][device_room_id] = {'devices':[]}
-    this.data['rooms'][device_room_id]['devices'].push({'type': device_type, 'address': device_address, 'serial': device_serial, 'name': device_name})
+    this.data['rooms'][device_room_id]['devices'].push({'type': device_type, 'address': device_address, 'serial': device_serial, 'name': device_name, 'room_id': device_room_id})
   }
 
 }
