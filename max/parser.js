@@ -102,14 +102,14 @@ Parser.prototype.parseConfig = function(line) {
   var current_value = config[pos++] / 2
   if (device_type == 'thermostat' || device_type == 'wall_thermostat') response['min_set_temp'] = current_value
 
-  var current_value = (config[pos++] / 2 - 3,5)
-  if (device_type == 'thermostat' || device_type == 'wall_thermostat') response['temp_offset'] = current_value
+  var current_value = config[pos++] / 2 - 3.5
+  if (device_type == 'thermostat') response['temp_offset'] = current_value
 
   var current_value = config[pos++] / 2
-  if (device_type == 'thermostat' || device_type == 'wall_thermostat') response['window_open_temp'] = current_value
+  if (device_type == 'thermostat') response['window_open_temp'] = current_value
 
   var current_value = config[pos++]
-  if (device_type == 'thermostat' || device_type == 'wall_thermostat') response['window_open_duration'] = current_value
+  if (device_type == 'thermostat') response['window_open_duration'] = current_value
 
   var boost = config[pos++]
   if (device_type == 'thermostat') {
