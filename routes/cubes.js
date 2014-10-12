@@ -64,7 +64,7 @@ router.get('/', function(req, res) {
 //
 // When connecting to the cube via TCP port 62910 (at least from FW 010e on),
 // the cube returns its state information in a proprietary, text-based
-// protocol. 
+// protocol.
 //
 // See also http://www.domoticaforum.eu/viewtopic.php?f=66&t=6654#p50589
 router.get('/:ip', function(req, res) {
@@ -73,6 +73,7 @@ router.get('/:ip', function(req, res) {
   client.on('error', function(error) {
     res.status(404).json({'error': "Could not connect to " + req.params.ip + ": " + error})
   })
+  var responded = false
 
   client
   // split into lines
@@ -80,9 +81,13 @@ router.get('/:ip', function(req, res) {
   // parse until done, then return JSON
   .pipe(through(function (line) {
     parser.parseLine(line)
-    if (parser.finishedParsing) {
+    if (parser.finishedParsing && !responded) {
       client.end()
       res.json(parser.data)
+      responded = true
+    }
+  }))
+})
     }
   }))
 })
