@@ -1,5 +1,7 @@
 
 WEEKDAYS = ['sat', 'sun', 'mon', 'tue', 'wed', 'thu', 'fri']
+DEVICE_TYPES = ['cube', 'thermostat', undefined, 'wall_thermostat', 'window_sensor', 'eco_switch']
+MODES = ['auto', 'manual', 'vacation', 'boost']
 
 function Parser() {
   this.data = {'cube': {}, 'rooms':{}}
@@ -56,25 +58,8 @@ Parser.prototype.parseMetadata = function(line) {
   var device_count = metadata[pos++]
   for (var i = 0; i < device_count; i++) {
     var device_type_id = metadata[pos++]
-    switch (device_type_id) {
-    case 0:
-      var device_type = 'cube'
-      break;
-    case 1:
-      var device_type = 'thermostat'
-      break;
-    case 3:
-      var device_type = 'wall_thermostat'
-      break;
-    case 4:
-      var device_type = 'window_sensor'
-      break;
-    case 5:
-      var device_type = 'eco_switch'
-      break;
-    default:
-      var device_type = device_type_id
-    }
+    var device_type = DEVICE_TYPES[device_type_id]
+
     var device_address = metadata.slice(pos, pos += 3).toString('hex')
     var device_serial = metadata.slice(pos, pos += 10).toString()
     var device_name_length = metadata[pos++]
@@ -173,20 +158,8 @@ Parser.prototype.parseDeviceList = function(line) {
     response['is_valid'] = (state1 & 0x10) >> 4 == 1
 
     var state2 = info[pos++]
-    switch (state2 & 0x3) {
-    case 0x0:
-      response['mode'] = 'auto'
-      break;
-    case 0x1:
-      response['mode'] = 'manual'
-      break;
-    case 0x2:
-      response['mode'] = 'vacation'
-      break;
-    case 0x3:
-      response['mode'] = 'boost'
-      break;
-    }
+    response['mode'] = MODES[state2 & 0x3]
+
     response['dst_auto'] = (state2 & 0x8) >> 3 == 1
     response['gateway_known'] = (state2 & 0x10) >> 4 == 1
     response['panel_locked'] = (state2 & 0x20) >> 5 == 1
