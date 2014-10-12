@@ -11,6 +11,14 @@ var router = express.Router();
 
 var PORT = 62910;
 
+// Discover cubes
+//
+// Cubes on the local network can be discovered by sending a UDP broadcast
+// with a specific "hello" message (see below). Cubes will respond with
+// an 'eQ3MaxAp' signature and their firmware version.
+//
+// By default, this code will wait exactly 2 seconds to collect responses. It
+// will not return a response earlier than that.
 router.get('/', function(req, res) {
   var cubes = [];
   var client = dgram.createSocket('udp4');
@@ -35,6 +43,7 @@ router.get('/', function(req, res) {
 
     client.addMembership('224.0.0.1')
 
+    // hello message: 'eQ3Max***********I'
     var message = new Buffer("6551334d61782a002a2a2a2a2a2a2a2a2a2a49", "hex");
 
     client.send(message, 0, message.length, 23272, '224.0.0.1', function(err, bytes) {
@@ -51,6 +60,13 @@ router.get('/', function(req, res) {
   }, 2000);
 })
 
+// Get cube state
+//
+// When connecting to the cube via TCP port 62910 (at least from FW 010e on),
+// the cube returns its state information in a proprietary, text-based
+// protocol. 
+//
+// See also http://www.domoticaforum.eu/viewtopic.php?f=66&t=6654#p50589
 router.get('/:ip', function(req, res) {
   var parser = new maxparser();
   var client = net.createConnection(PORT, req.params.ip)
