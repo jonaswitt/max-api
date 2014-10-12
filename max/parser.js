@@ -85,31 +85,53 @@ Parser.prototype.parseConfig = function(line) {
   var address = config.slice(pos, pos += 3).toString('hex')
 
   var device_type_id = config[pos++]
+  var device_type = DEVICE_TYPES[device_type_id]
 
   var unknown1 = config.slice(pos, pos += 3).toString('hex')
   response['serial'] = config.slice(pos, pos += 10).toString()
-  response['comfort_temp'] = config[pos++] / 2
-  response['eco_temp'] = config[pos++] / 2
-  response['max_set_temp'] = config[pos++] / 2
-  response['min_set_temp'] = config[pos++] / 2
-  response['temp_offset'] = config[pos++] / 2 - 3,5
-  response['window_open_temp'] = config[pos++] / 2
-  response['window_open_duration'] = config[pos++]
+
+  var current_value = config[pos++] / 2
+  if (device_type == 'thermostat' || device_type == 'wall_thermostat') response['comfort_temp'] = current_value
+
+  var current_value = config[pos++] / 2
+  if (device_type == 'thermostat' || device_type == 'wall_thermostat') response['eco_temp'] = current_value
+
+  var current_value = config[pos++] / 2
+  if (device_type == 'thermostat' || device_type == 'wall_thermostat') response['max_set_temp'] = current_value
+
+  var current_value = config[pos++] / 2
+  if (device_type == 'thermostat' || device_type == 'wall_thermostat') response['min_set_temp'] = current_value
+
+  var current_value = (config[pos++] / 2 - 3,5)
+  if (device_type == 'thermostat' || device_type == 'wall_thermostat') response['temp_offset'] = current_value
+
+  var current_value = config[pos++] / 2
+  if (device_type == 'thermostat' || device_type == 'wall_thermostat') response['window_open_temp'] = current_value
+
+  var current_value = config[pos++]
+  if (device_type == 'thermostat' || device_type == 'wall_thermostat') response['window_open_duration'] = current_value
 
   var boost = config[pos++]
-  response['boost_valve_pos'] = (boost & 0x1f) * 5
-  var boost_duration_value = (boost & 0xe0) >> 5
-  response['boost_duration'] = boost_duration_value == 7 ? 30 : boost_duration_value * 5
+  if (device_type == 'thermostat') {
+    response['boost_valve_pos'] = (boost & 0x1f) * 5
+    var boost_duration_value = (boost & 0xe0) >> 5
+    response['boost_duration'] = boost_duration_value == 7 ? 30 : boost_duration_value * 5
+  }
 
   var decalc = config[pos++]
-  response['decalc_hour'] = (boost & 0x1f)
-  response['decalc_day'] = (boost & 0xe0) >> 5
+  if (device_type == 'thermostat') {
+    response['decalc_hour'] = (boost & 0x1f)
+    response['decalc_day'] = (boost & 0xe0) >> 5
+  }
 
-  response['max_valve_setting'] = config[pos++] / 255 * 100
-  response['valve_offset'] = config[pos++] / 255 * 100
+  var current_value = config[pos++] / 255 * 100
+  if (device_type == 'thermostat') response['max_valve_setting'] = current_value
 
-  response['wprogram'] = {}
-  if (config.length > pos + 1 && device_type_id == 1) {
+  var current_value = config[pos++] / 255 * 100
+  if (device_type == 'thermostat') response['valve_offset'] = current_value
+
+  if (config.length > pos + 1 && device_type == 'thermostat') {
+    response['wprogram'] = {}
     for (var i = 0; i < 7; i++) {
       var wprogram = config.slice(pos, pos += 26)
       response['wprogram'][WEEKDAYS[i]] = []
@@ -149,6 +171,7 @@ Parser.prototype.parseDeviceList = function(line) {
     var length = info[pos++]
     var next_pos = pos + length
     var address = info.slice(pos, pos += 3).toString('hex')
+    var device = this.getDeviceByAddress(address)
 
     var unknown1 = info[pos++]
     var state1 = info[pos++]
@@ -158,7 +181,7 @@ Parser.prototype.parseDeviceList = function(line) {
     response['is_valid'] = (state1 & 0x10) >> 4 == 1
 
     var state2 = info[pos++]
-    response['mode'] = MODES[state2 & 0x3]
+    if (device['type'] == 'thermostat' || device['type'] == 'wall_thermostat') response['mode'] = MODES[state2 & 0x3]
 
     response['dst_auto'] = (state2 & 0x8) >> 3 == 1
     response['gateway_known'] = (state2 & 0x10) >> 4 == 1
@@ -166,8 +189,11 @@ Parser.prototype.parseDeviceList = function(line) {
     response['link_error'] = (state2 & 0x40) >> 6 == 1
     response['battery_low'] = (state2 & 0x80) >> 7 == 1
 
-    response['valve_pos'] = info[pos++]
-    response['temp_point'] = info[pos++] / 2
+    var current_value = info[pos++]
+    if (device['type'] == 'thermostat') response['valve_pos'] = current_value
+
+    var current_value = info[pos++] / 2
+    if (device['type'] == 'thermostat') response['target_temp'] = current_value
 
     if (length > 6) {
       var date1 = info[pos++]
@@ -185,7 +211,6 @@ Parser.prototype.parseDeviceList = function(line) {
 
     pos = next_pos
 
-    var device = this.getDeviceByAddress(address)
     if (device) {
       for (var attrname in response) { device[attrname] = response[attrname]; }
     }
