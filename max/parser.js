@@ -196,6 +196,8 @@ Parser.prototype.parseDeviceList = function(line) {
     if (device['type'] == 'thermostat') response['target_temp'] = current_value
 
     if (length > 6) {
+      var datetime_slice = info.slice(pos, pos + 3)
+
       var date1 = info[pos++]
       var date2 = info[pos++]
 
@@ -206,7 +208,10 @@ Parser.prototype.parseDeviceList = function(line) {
       var year = (date & 0x3F) + 2000
       var time_until_minutes = info[pos++] * 30
 
-      response['until'] = new Date(year, month, day, time_until_minutes / 60, time_until_minutes % 60, 0)
+      if (datetime_slice.toString('hex') == '000000')
+        response['until'] = null
+      else
+        response['until'] = new Date(year, month, day, time_until_minutes / 60, time_until_minutes % 60, 0)
     }
 
     pos = next_pos
