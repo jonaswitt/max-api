@@ -192,26 +192,28 @@ Parser.prototype.parseDeviceList = function(line) {
     var current_value = info[pos++]
     if (device['type'] == 'thermostat') response['valve_pos'] = current_value
 
-    var current_value = info[pos++] / 2
-    if (device['type'] == 'thermostat') response['target_temp'] = current_value
+    var target_temp = info[pos++] / 2
+    if (device['type'] == 'thermostat') response['target_temp'] = target_temp
 
-    if (length > 6) {
-      var datetime_slice = info.slice(pos, pos + 3)
+    if (device['type'] == 'wall_thermostat') {
+      pos += 3
 
-      var date1 = info[pos++]
-      var date2 = info[pos++]
+      var actual = info[pos++]
+      if (target_temp > 64) actual += 255
 
-      var date = (date1 << 8) + date2
+      response['actual_temp'] = actual / 10
+    }
+    else if (device['type'] == 'thermostat') {
+      var shift = info[pos++]
 
-      var month = ((date & 0xE000) >> 12) + ((date & 0x80) >> 7)
-      var day = (date & 0x1F00) >> 8
-      var year = (date & 0x3F) + 2000
-      var time_until_minutes = info[pos++] * 30
+      var actual = info[pos++]
 
-      if (datetime_slice.toString('hex') == '000000')
-        response['until'] = null
-      else
-        response['until'] = new Date(year, month, day, time_until_minutes / 60, time_until_minutes % 60, 0)
+      if (shift == 1) actual += 255
+
+      actual = actual / 10
+      if (actual == 0) actual = null
+
+      response['actual_temp'] = actual
     }
 
     pos = next_pos
