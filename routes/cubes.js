@@ -1,15 +1,9 @@
 var express = require('express');
 var net = require('net');
 var dgram = require('dgram');
-var split = require('split');
-var through = require('through');
-var es = require('event-stream');
-var reduce = require('stream-reduce');
-var maxparser = require('../max/parser');
+var cube = require('../lib/cube');
 
 var router = express.Router();
-
-var PORT = 62910;
 
 // Discover cubes
 //
@@ -68,25 +62,14 @@ router.get('/', function(req, res) {
 //
 // See also http://www.domoticaforum.eu/viewtopic.php?f=66&t=6654#p50589
 router.get('/:ip', function(req, res) {
-  var parser = new maxparser();
-  var client = net.createConnection(PORT, req.params.ip)
-  client.on('error', function(error) {
-    res.status(404).json({'error': "Could not connect to " + req.params.ip + ": " + error})
-  })
-  var responded = false
-
-  client
-  // split into lines
-  .pipe(split())
-  // parse until done, then return JSON
-  .pipe(through(function (line) {
-    parser.parseLine(line)
-    if (parser.finishedParsing && !responded) {
-      client.end()
-      res.json(parser.data)
-      responded = true
+  cube.getCubeInfo(req.params.ip, function(data, error) {
+    if (error) {
+      res.status(404).json({'error': "Could not connect to " + req.params.ip + ": " + error})
     }
-  }))
+    else {
+      res.json(data)
+    }
+  })
 })
 
 module.exports = router;
