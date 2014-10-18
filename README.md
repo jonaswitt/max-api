@@ -15,6 +15,8 @@ having to re-implement the MAX! protocol.
 Currently supported features
 ----------------------------
 
+The node app (app.js) supports the following HTTP request types:
+
 - GET /cubes
   Return all MAX! cubes on the local network as a JSON array (contains IP address,
   port and firmware)
@@ -35,3 +37,11 @@ To install this program's dependencies, use the node package manager and run
 To run this program, simply type `node app.js` - open http://localhost:3000/cubes
 in your browser to see a list of cubes or http://localhost:3000/cubes/cube_ip to
 get detailed state information about one cube.
+
+Recording Cube Data
+-------------------
+
+Use the recording script (`node record.js`) to capture cube data. The cube
+state will be retrieved every 60 seconds and under ./recorded_data, one CSV file
+per thermostat will be written continuously with the most important data such
+as temperatures and valve settings.
