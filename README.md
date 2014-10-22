@@ -42,6 +42,5 @@ Recording Cube Data
 -------------------
 
 Use the recording script (`node record.js`) to capture cube data. The cube
-state will be retrieved every 60 seconds and under ./recorded_data, one CSV file
-per thermostat will be written continuously with the most important data such
-as temperatures and valve settings.
+state will be retrieved every 60 seconds and the most important data, such
+as temperatures and valve settings, will be stored in mongodb.
