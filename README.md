@@ -32,7 +32,7 @@ The requirement to run this program is Node.js (see http://nodejs.org/ for
 details / installation).
 
 To install this program's dependencies, use the node package manager and run
-`npm install -g`
+`npm install`
 
 To run this program, simply type `node app.js` - open http://localhost:3000/cubes
 in your browser to see a list of cubes or http://localhost:3000/cubes/cube_ip to
