@@ -13,12 +13,7 @@ var router = express.Router();
 // By default, this code will wait exactly 2 seconds to collect responses. It
 // will not return a response earlier than that.
 router.get('/', function(req, res) {
-  cube.browseCubes(function(error, cubes) {
-    if (cubes)
-      res.json(cubes)
-    else
-      res.status(500).json({'error': error})
-  })
+  res.json(cube.getKnownCubes())
 })
 
 // Get cube state
