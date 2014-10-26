@@ -41,6 +41,6 @@ get detailed state information about one cube.
 Recording Cube Data
 -------------------
 
-Use the recording script (`node record.js`) to capture cube data. The cube
-state will be retrieved every 60 seconds and the most important data, such
-as temperatures and valve settings, will be stored in mongodb.
+While the server is running, cube state of all known cubes will be retrieved every 
+60 seconds and the most important data, such as temperatures and valve settings, 
+will be stored in mongodb.
