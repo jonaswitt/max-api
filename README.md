@@ -44,3 +44,10 @@ Recording Cube Data
 While the server is running, cube state of all known cubes will be retrieved every 
 60 seconds and the most important data, such as temperatures and valve settings, 
 will be stored in mongodb.
+
+Testing
+-------
+
+Tests are written in Mocha (http://mochajs.org/) and can be executed by running 
+`mocha` (`npm install -g mocha` first)
+
