@@ -1,6 +1,5 @@
 var express = require('express');
 var net = require('net');
-var dgram = require('dgram');
 var cube = require('../lib/cube');
 
 var router = express.Router();
@@ -14,44 +13,12 @@ var router = express.Router();
 // By default, this code will wait exactly 2 seconds to collect responses. It
 // will not return a response earlier than that.
 router.get('/', function(req, res) {
-  var cubes = [];
-  var client = dgram.createSocket('udp4');
-
-  client.on('message', function(msg, rinfo) {
-    var signature = msg.slice(0, 8).toString('ascii')
-    if (signature != 'eQ3MaxAp') return;
-
-    var firmware = msg.slice(24, 26).toString('hex')
-    var port = firmware > '010e' ? 62910 : 80;
-
-    cubes.push({'address': rinfo.address, 'port': port, 'firmware': firmware})
-  });
-
-  client.on("error", function (err) {
-    console.log(err.stack);
-  });
-
-  client.bind(23272, function () {
-    client.setBroadcast(true)
-    client.setTTL(5)
-
-    client.addMembership('224.0.0.1')
-
-    // hello message: 'eQ3Max***********I'
-    var message = new Buffer("6551334d61782a002a2a2a2a2a2a2a2a2a2a49", "hex");
-
-    client.send(message, 0, message.length, 23272, '224.0.0.1', function(err, bytes) {
-      if (err) console.log(err);
-    });
-    client.send(message, 0, message.length, 23272, '255.255.255.255', function(err, bytes) {
-      if (err) console.log(err);
-    });
+  cube.browseCubes(function(error, cubes) {
+    if (cubes)
+      res.json(cubes)
+    else
+      res.status(500).json({'error': error})
   })
-
-  setTimeout(function() {
-    client.close();
-    res.json(cubes)
-  }, 2000);
 })
 
 // Get cube state
