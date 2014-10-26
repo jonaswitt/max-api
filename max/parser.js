@@ -1,4 +1,7 @@
 
+var split = require("split")
+var through = require("through")
+
 WEEKDAYS = ['sat', 'sun', 'mon', 'tue', 'wed', 'thu', 'fri']
 DEVICE_TYPES = ['cube', 'thermostat', undefined, 'wall_thermostat', 'window_sensor', 'eco_switch']
 MODES = ['auto', 'manual', 'vacation', 'boost']
@@ -6,6 +9,23 @@ MODES = ['auto', 'manual', 'vacation', 'boost']
 function Parser() {
   this.data = {'cube': {}, 'rooms':{}}
   this.finishedParsing = false
+}
+
+Parser.prototype.parseStream = function(stream, callback) {
+  var responded = false
+  var parser = this
+
+  stream
+  // split into lines
+  .pipe(split())
+  // parse until done, then return JSON
+  .pipe(through(function (line) {
+    parser.parseLine(line)
+    if (parser.finishedParsing && !responded) {
+      callback(undefined, parser.data)
+      responded = true
+    }
+  }))
 }
 
 Parser.prototype.parseLine = function(line) {
