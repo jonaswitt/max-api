@@ -1,4 +1,5 @@
 
+require('console-stamp')(console, "[dd.MM.yyyy HH:mm:ss]");
 var express = require('express');
 var bodyParser = require('body-parser')
 var app = express();
