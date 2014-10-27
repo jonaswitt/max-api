@@ -5,6 +5,7 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
+    "coffee-script": "~1.8.0",
     "express": "4.x",
     "split": "0.3.x",
     "through": "2.3.x",

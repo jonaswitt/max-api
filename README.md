@@ -2,7 +2,7 @@
 MAX! API
 ========
 
-A Node.js based REST API for the MAX! heating control system by eq-3
+A Node.js / CoffeeScript based REST API for the MAX! heating control system by eq-3
 (http://www.eq-3.de/max-heizungssteuerung.html).
 
 The objective of this project is to implement everything that is known about the
@@ -15,7 +15,7 @@ having to re-implement the MAX! protocol.
 Currently supported features
 ----------------------------
 
-The node app (app.js) supports the following HTTP request types:
+The node app (app.coffee) supports the following HTTP request types:
 
 - GET /cubes
   Return all MAX! cubes on the local network as a JSON array (contains IP address,
@@ -34,7 +34,7 @@ details / installation).
 To install this program's dependencies, use the node package manager and run
 `npm install`
 
-To run this program, simply type `node app.js` - open http://localhost:3000/cubes
+To run this program, simply type `coffee app.js` - open http://localhost:3000/cubes
 in your browser to see a list of cubes or http://localhost:3000/cubes/cube_ip to
 get detailed state information about one cube.
 
