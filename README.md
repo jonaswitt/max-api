@@ -51,3 +51,4 @@ Testing
 Tests are written in Mocha (http://mochajs.org/) and can be executed by running 
 `mocha` (`npm install -g mocha` first)
 
+Code coverage can be determined using `mocha -r blanket -R html-cov > coverage/index.html`

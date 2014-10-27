@@ -15,5 +15,11 @@
     "mongoose": "~3.8.17",
     "async": "~0.9.0",
     "console-stamp": "~0.1.3"
+  },
+  "config": {
+    "blanket": {
+      "data-cover-only": ["max", "lib"],
+      "data-cover-never": "node_modules"
+    }
   }
 }
