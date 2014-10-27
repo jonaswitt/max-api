@@ -1,7 +1,7 @@
 
 var assert = require("assert")
 var fs = require("fs")
-var maxparser = require("../max/parser")
+var maxparser = require("../lib/parser")
 var path = require("path")
 
 var assert_response = function(name, done) {
