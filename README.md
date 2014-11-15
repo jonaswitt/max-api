@@ -5,6 +5,8 @@ MAX! API
 A Node.js / CoffeeScript based REST API for the MAX! heating control system by eq-3
 (http://www.eq-3.de/max-heizungssteuerung.html).
 
+[![Build Status](https://travis-ci.org/jonaswitt/max-api.svg?branch=master)](https://travis-ci.org/jonaswitt/max-api)
+
 The objective of this project is to implement everything that is known about the
 proprietary MAX! Cube protocol in a modern language that will run on most
 platforms and make cube state information and supported commands (such as setting
