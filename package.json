@@ -22,5 +22,8 @@
       "data-cover-only": ["max", "lib"],
       "data-cover-never": "node_modules"
     }
+  },
+  "scripts": {
+    "test": "mocha --compilers coffee:coffee-script/register"
   }
 }
